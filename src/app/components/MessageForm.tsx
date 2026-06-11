@@ -8,6 +8,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgoblnql";
 
 export function MessageForm() {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
@@ -20,11 +21,12 @@ export function MessageForm() {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify({ name, message }),
+        body: JSON.stringify({ name, email: email.trim() || "anonymous@rememberus.uk", message }),
       });
       if (res.ok) {
         setStatus("sent");
         setName("");
+        setEmail("");
         setMessage("");
       } else {
         setStatus("error");
@@ -86,6 +88,22 @@ export function MessageForm() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="e.g. Sarah Chen"
+                className="w-full px-4 py-2.5 rounded-xl outline-none"
+                style={{ border: "2px solid #e8f5cc", fontFamily: "var(--font-body)", color: "#1c2e23" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "#84bd00")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "#e8f5cc")}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm mb-1.5" style={{ color: "#1c2e23", fontFamily: "var(--font-body)", fontWeight: 700 }}>
+                Your email <span style={{ fontWeight: 400, color: "#00563a" }}>(optional)</span>
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="e.g. sarah@example.com"
                 className="w-full px-4 py-2.5 rounded-xl outline-none"
                 style={{ border: "2px solid #e8f5cc", fontFamily: "var(--font-body)", color: "#1c2e23" }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = "#84bd00")}
