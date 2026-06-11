@@ -21,9 +21,25 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      const r = await fetch(`${url}/lrange/${REDIS_KEY}/0/199`, { headers });
+      // Single-command REST format: POST to root with ["LRANGE", key, start, stop]
+      const r = await fetch(url, {
+        method: "POST",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify(["LRANGE", REDIS_KEY, "0", "199"]),
+      });
       const data = await r.json();
-      const messages = (data.result || []).map((s) => JSON.parse(s));
+      const messages = (data.result || [])
+        .map((s) => {
+          try {
+            let parsed = JSON.parse(s);
+            // Tolerate older entries that were accidentally double-wrapped in an array
+            if (Array.isArray(parsed)) parsed = JSON.parse(parsed[0]);
+            return parsed;
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean);
       res.status(200).json({ messages });
     } catch {
       res.status(500).json({ error: "Failed to load messages." });
@@ -49,10 +65,11 @@ export default async function handler(req, res) {
         date: new Date().toISOString(),
       });
 
-      await fetch(`${url}/lpush/${REDIS_KEY}`, {
+      // Single-command REST format: POST to root with ["LPUSH", key, value]
+      await fetch(url, {
         method: "POST",
         headers: { ...headers, "Content-Type": "application/json" },
-        body: JSON.stringify([entry]),
+        body: JSON.stringify(["LPUSH", REDIS_KEY, entry]),
       });
 
       res.status(200).json({ ok: true });
