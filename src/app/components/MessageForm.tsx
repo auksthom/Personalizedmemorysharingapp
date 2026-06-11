@@ -18,12 +18,21 @@ export function MessageForm() {
 
     setStatus("sending");
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      // Save to the live Message Wall (shows up instantly on rememberus.uk)
+      const wallRes = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message }),
+      });
+
+      // Also send via Formspree so you get an email notification
+      const emailRes = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
         body: JSON.stringify({ name, email: email.trim() || "anonymous@rememberus.uk", message }),
       });
-      if (res.ok) {
+
+      if (wallRes.ok || emailRes.ok) {
         setStatus("sent");
         setName("");
         setEmail("");

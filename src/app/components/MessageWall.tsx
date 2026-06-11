@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 
 interface WallMessage {
@@ -7,9 +8,8 @@ interface WallMessage {
   date?: string;
 }
 
-// Approved messages live as content files under src/content/messages/*.json —
-// add new ones via the /admin CMS ("Messages" collection) after reviewing
-// submissions that come in via the /message page (Formspree).
+// Curated/seed messages live as content files under src/content/messages/*.json —
+// add new ones via the /admin CMS ("Messages" collection) if you want to hand-pick some.
 const messageModules = import.meta.glob<WallMessage>("../../content/messages/*.json", {
   eager: true,
   import: "default",
@@ -17,9 +17,23 @@ const messageModules = import.meta.glob<WallMessage>("../../content/messages/*.j
 
 const ACCENTS = ["#e03189", "#84bd00", "#20c6b9"];
 
-const messages: WallMessage[] = Object.values(messageModules).sort((a, b) => b.id - a.id);
+const seedMessages: WallMessage[] = Object.values(messageModules);
 
 export function MessageWall() {
+  const [liveMessages, setLiveMessages] = useState<WallMessage[]>([]);
+
+  useEffect(() => {
+    fetch("/api/messages")
+      .then((res) => (res.ok ? res.json() : { messages: [] }))
+      .then((data) => setLiveMessages(data.messages || []))
+      .catch(() => setLiveMessages([]));
+  }, []);
+
+  // Live submissions (newest first) appear above the curated/seed messages
+  const messages: WallMessage[] = [...liveMessages, ...seedMessages].sort(
+    (a, b) => (b.id || 0) - (a.id || 0)
+  );
+
   return (
     <section className="px-6 md:px-12 py-16" style={{ backgroundColor: "#f4fbe6" }}>
       <div className="max-w-3xl mx-auto">
