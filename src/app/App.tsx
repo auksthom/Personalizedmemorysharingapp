@@ -5,7 +5,7 @@ import { RecentVideos } from "./components/RecentVideos";
 import { MoodGate } from "./components/MoodGate";
 import { PhotoMosaic } from "./components/PhotoMosaic";
 import { PeopleGrid } from "./components/PeopleGrid";
-import { MessageForm } from "./components/MessageForm";
+import { MessageWall } from "./components/MessageWall";
 import { MOODS, type Mood } from "./data/people";
 
 {/* MARKER-MAKE-KIT-INVOKED */}
@@ -14,7 +14,7 @@ const navLinks = [
   { label: "Videos 🎬", href: "#videos", color: "#84bd00" },
   { label: "Photos 📸", href: "#photos", color: "#20c6b9" },
   { label: "People 👥", href: "#people", color: "#84bd00" },
-  { label: "Message ✍️", href: "#message", color: "#e03189" },
+  { label: "Messages 💌", href: "#message", color: "#e03189" },
 ];
 
 export default function App() {
@@ -115,7 +115,7 @@ export default function App() {
         </div>
 
         <div id="message">
-          <MessageForm />
+          <MessageWall />
         </div>
 
         {/* Footer */}

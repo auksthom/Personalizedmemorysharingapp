@@ -90,3 +90,19 @@ collections:
       - { label: "Photo", name: "image", widget: "image" }
       - { label: "Caption", name: "caption", widget: "string" }
       - { label: "Accent colour (optional)", name: "accent", widget: "color", required: false, allow_input: true, default: "" }
+
+  - name: "messages"
+    label: "Messages"
+    label_singular: "Message"
+    folder: "src/content/messages"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    slug: "{{fields.id}}-{{slug}}"
+    identifier_field: name
+    fields:
+      - { label: "ID", name: "id", widget: "number", value_type: "int", hint: "Unique number, doesn't need to change once set" }
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Message", name: "message", widget: "text" }
+      - { label: "Date (optional)", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
