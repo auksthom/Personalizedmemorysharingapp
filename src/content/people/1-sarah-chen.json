@@ -4,9 +4,7 @@
   "role": "Product Designer",
   "photo": "/media/photos/1.jpg",
   "accent": "#e03189",
-  "messages": {
-    "happy": { "message": "I still remember our first project review — you walked in completely prepared and made everyone excited about the work. That energy was contagious every single day!", "video": "/media/videos/1_happy.mp4", "duration": "1:42" },
-    "sad": { "message": "I'm going to miss seeing your face at our desk every morning. The office really won't feel the same without you here.", "video": "/media/videos/1_sad.mp4", "duration": "1:50" },
-    "miserable": { "message": "Okay, I know today feels rough — but remember how far you've come. We're so proud of you, and we're only ever a message away.", "video": "/media/videos/1_miserable.mp4", "duration": "1:35" }
-  }
+  "message": "I still remember our first project review — you walked in completely prepared and made everyone excited about the work. That energy was contagious every single day!",
+  "video": "/media/videos/1_happy.mp4",
+  "duration": "1:42"
 }

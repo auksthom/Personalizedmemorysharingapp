@@ -4,9 +4,7 @@
   "role": "Frontend Engineer",
   "photo": "/media/photos/7.jpg",
   "accent": "#e03189",
-  "messages": {
-    "happy": { "message": "I'll miss having someone who cares about the pixels. The animations, the spacing, the way things felt — you made our product beautiful and never let us forget it mattered!", "video": "/media/videos/7_happy.mp4", "duration": "2:08" },
-    "sad": { "message": "Our Friday design nitpick sessions were honestly one of my favourite parts of the week. Thank you for caring so much.", "video": "/media/videos/7_sad.mp4", "duration": "1:58" },
-    "miserable": { "message": "Bad day? Take a breath. Even the messiest CSS gets cleaned up eventually — and so will this. We're cheering you on.", "video": "/media/videos/7_miserable.mp4", "duration": "1:32" }
-  }
+  "message": "I'll miss having someone who cares about the pixels. The animations, the spacing, the way things felt — you made our product beautiful and never let us forget it mattered!",
+  "video": "/media/videos/7_happy.mp4",
+  "duration": "2:08"
 }

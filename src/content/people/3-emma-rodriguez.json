@@ -4,9 +4,7 @@
   "role": "Marketing Director",
   "photo": "/media/photos/3.jpg",
   "accent": "#20c6b9",
-  "messages": {
-    "happy": { "message": "Every campaign we ran together was better because of your perspective. You saw things none of us saw. Cheers to the next chapter!", "video": "/media/videos/3_happy.mp4", "duration": "1:58" },
-    "sad": { "message": "The whole team is going to feel your absence. We loved working with you more than you probably realised.", "video": "/media/videos/3_sad.mp4", "duration": "2:02" },
-    "miserable": { "message": "Sending you the biggest hug right now. Whatever's weighing on you today, you've got people in your corner — always.", "video": "/media/videos/3_miserable.mp4", "duration": "1:40" }
-  }
+  "message": "Every campaign we ran together was better because of your perspective. You saw things none of us saw. Cheers to the next chapter!",
+  "video": "/media/videos/3_happy.mp4",
+  "duration": "1:58"
 }

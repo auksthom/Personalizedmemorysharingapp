@@ -28,31 +28,9 @@ collections:
       - { label: "Role", name: "role", widget: "string" }
       - { label: "Photo", name: "photo", widget: "image", default: "/media/photos/placeholder.svg" }
       - { label: "Accent colour", name: "accent", widget: "color", default: "#84bd00" }
-      - label: "Messages by mood"
-        name: "messages"
-        widget: "object"
-        fields:
-          - label: "Happy"
-            name: "happy"
-            widget: "object"
-            fields:
-              - { label: "Message", name: "message", widget: "text" }
-              - { label: "Video", name: "video", widget: "file" }
-              - { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
-          - label: "Sad"
-            name: "sad"
-            widget: "object"
-            fields:
-              - { label: "Message", name: "message", widget: "text" }
-              - { label: "Video", name: "video", widget: "file" }
-              - { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
-          - label: "Miserable"
-            name: "miserable"
-            widget: "object"
-            fields:
-              - { label: "Message", name: "message", widget: "text" }
-              - { label: "Video", name: "video", widget: "file" }
-              - { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
+      - { label: "Message", name: "message", widget: "text" }
+      - { label: "Video", name: "video", widget: "file" }
+      - { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
 
   - name: "recent_videos"
     label: "Recent Videos"

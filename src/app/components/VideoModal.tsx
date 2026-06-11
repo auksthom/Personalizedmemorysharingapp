@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { X, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import type { Mood, Person } from "../data/people";
+import type { Person } from "../data/people";
 
 interface VideoModalProps {
   person: Person | null;
-  mood: Mood;
   onClose: () => void;
 }
 
-export function VideoModal({ person, mood, onClose }: VideoModalProps) {
+export function VideoModal({ person, onClose }: VideoModalProps) {
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
@@ -23,11 +22,10 @@ export function VideoModal({ person, mood, onClose }: VideoModalProps) {
   }, [onClose]);
 
   const accent = person?.accent || "#e03189";
-  const content = person ? person.messages[mood] : null;
 
   return (
     <AnimatePresence>
-      {person && content && (
+      {person && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -52,8 +50,8 @@ export function VideoModal({ person, mood, onClose }: VideoModalProps) {
             {/* Video area */}
             <div className="relative aspect-video overflow-hidden" style={{ backgroundColor: "#1c2e23" }}>
               <video
-                key={content.video}
-                src={content.video}
+                key={person.video}
+                src={person.video}
                 poster={person.photo}
                 controls
                 playsInline
@@ -96,12 +94,12 @@ export function VideoModal({ person, mood, onClose }: VideoModalProps) {
 
               <div className="p-4 rounded-xl" style={{ backgroundColor: "#f4fbe6", border: `2px solid ${accent}33` }}>
                 <p className="text-sm leading-relaxed" style={{ color: "#00563a", fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                  "{content.message}"
+                  "{person.message}"
                 </p>
               </div>
 
               <p className="text-xs mt-3 text-right" style={{ color: "#00563a", fontFamily: "var(--font-body)", opacity: 0.7 }}>
-                Duration: {content.duration}
+                Duration: {person.duration}
               </p>
             </div>
           </motion.div>

@@ -4,9 +4,7 @@
   "role": "Engineering Lead",
   "photo": "/media/photos/2.jpg",
   "accent": "#84bd00",
-  "messages": {
-    "happy": { "message": "You taught me that good code isn't just about being clever — it's about being kind to the next person who reads it. That lesson stuck with me. So did you!", "video": "/media/videos/2_happy.mp4", "duration": "2:15" },
-    "sad": { "message": "Every code review is going to feel a little quieter without your comments. Thank you for everything you taught this team.", "video": "/media/videos/2_sad.mp4", "duration": "2:05" },
-    "miserable": { "message": "If today's a tough one, just know the impact you made here is permanent. Take it easy on yourself — you've earned it.", "video": "/media/videos/2_miserable.mp4", "duration": "1:48" }
-  }
+  "message": "You taught me that good code isn't just about being clever — it's about being kind to the next person who reads it. That lesson stuck with me. So did you!",
+  "video": "/media/videos/2_happy.mp4",
+  "duration": "2:15"
 }

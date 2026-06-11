@@ -1,12 +1,9 @@
-import { useState } from "react";
 import "../styles/fonts.css";
 import { HeroSection } from "./components/HeroSection";
 import { RecentVideos } from "./components/RecentVideos";
-import { MoodGate } from "./components/MoodGate";
 import { PhotoMosaic } from "./components/PhotoMosaic";
 import { PeopleGrid } from "./components/PeopleGrid";
 import { MessageWall } from "./components/MessageWall";
-import { MOODS, type Mood } from "./data/people";
 
 {/* MARKER-MAKE-KIT-INVOKED */}
 
@@ -18,16 +15,6 @@ const navLinks = [
 ];
 
 export default function App() {
-  const [mood, setMood] = useState<Mood | null>(null);
-  const [viewAll, setViewAll] = useState(false);
-
-  // Show the mood gate first, unless the visitor chose to skip it
-  if (!mood && !viewAll) {
-    return <MoodGate onSelect={setMood} onSkip={() => setViewAll(true)} />;
-  }
-
-  const activeMood = mood ?? MOODS[0].key;
-
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#fff", fontFamily: "var(--font-body)" }}>
       {/* Nav */}
@@ -106,12 +93,7 @@ export default function App() {
         </div>
 
         <div id="people">
-          <PeopleGrid
-            mood={activeMood}
-            viewAll={viewAll}
-            onToggleViewAll={() => setViewAll((v) => !v)}
-            onChangeMood={() => { setMood(null); setViewAll(false); }}
-          />
+          <PeopleGrid />
         </div>
 
         <div id="message">
