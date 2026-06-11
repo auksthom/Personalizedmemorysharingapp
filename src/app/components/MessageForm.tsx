@@ -4,7 +4,7 @@ import { Send, CheckCircle2 } from "lucide-react";
 
 // Sign up free at https://formspree.io, create a form, and paste its
 // endpoint URL here (looks like "https://formspree.io/f/abcdwxyz").
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgoblnql";
 
 export function MessageForm() {
   const [name, setName] = useState("");
