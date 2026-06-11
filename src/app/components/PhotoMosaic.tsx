@@ -2,24 +2,31 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, ZoomIn } from "lucide-react";
 
-const mosaicPhotos = [
-  { id: 1, url: "https://images.unsplash.com/photo-1758520144658-c87be518b87e?w=400&h=400&fit=crop&auto=format", caption: "Team kickoff 2024 🚀", span: "col-span-2 row-span-2", accent: "#e03189" },
-  { id: 2, url: "https://images.unsplash.com/photo-1758691737584-a8f17fb34475?w=200&h=200&fit=crop&auto=format", caption: "Friday celebrations 🎉", accent: "#84bd00" },
-  { id: 3, url: "https://images.unsplash.com/photo-1758873268933-e0765262e58d?w=200&h=200&fit=crop&auto=format", caption: "The annual retreat 🏕️", accent: "#20c6b9" },
-  { id: 4, url: "https://images.unsplash.com/photo-1758691737433-2269d5cdd910?w=200&h=200&fit=crop&auto=format", caption: "Late nights together 🌙", accent: "#e03189" },
-  { id: 5, url: "https://images.unsplash.com/photo-1758691737535-57edd2a11d73?w=200&h=200&fit=crop&auto=format", caption: "Project launch day 🎊", accent: "#84bd00" },
-  { id: 6, url: "https://images.unsplash.com/photo-1758873268904-89520408d4bc?w=400&h=200&fit=crop&auto=format", caption: "Epic team selfie 📸", span: "col-span-2", accent: "#20c6b9" },
-  { id: 7, url: "https://images.unsplash.com/photo-1758691737138-7b9b1884b1db?w=200&h=200&fit=crop&auto=format", caption: "Morning stand-ups ☕", accent: "#e03189" },
-  { id: 8, url: "https://images.unsplash.com/photo-1758518730523-c9f6336ebdae?w=200&h=400&fit=crop&auto=format", caption: "Offsite adventures 🗺️", span: "row-span-2", accent: "#84bd00" },
-  { id: 9, url: "https://images.unsplash.com/photo-1758520144661-73849bde0da1?w=200&h=200&fit=crop&auto=format", caption: "Goodbye lunch 🍽️", accent: "#20c6b9" },
-  { id: 10, url: "https://images.unsplash.com/photo-1758691737492-48e8fdd336f7?w=400&h=200&fit=crop&auto=format", caption: "Last day memories 💚", span: "col-span-2", accent: "#e03189" },
-  { id: 11, url: "https://images.unsplash.com/photo-1758691737538-220c1902b1ca?w=200&h=200&fit=crop&auto=format", caption: "Rooftop drinks 🥂", accent: "#84bd00" },
-];
+interface Photo {
+  id: number;
+  image: string;
+  caption: string;
+  accent?: string;
+}
 
-interface Photo { id: number; url: string; caption: string; span?: string; accent: string }
+// Photos are managed as content files under src/content/photos/*.json —
+// edit them directly, or use the /admin CMS to add a new "Photo".
+const photoModules = import.meta.glob<Photo>("../../content/photos/*.json", {
+  eager: true,
+  import: "default",
+});
+
+const ACCENTS = ["#e03189", "#84bd00", "#20c6b9"];
+
+const mosaicPhotos: Required<Photo>[] = Object.values(photoModules)
+  .sort((a, b) => a.id - b.id)
+  .map((photo, i) => ({
+    ...photo,
+    accent: photo.accent || ACCENTS[i % ACCENTS.length],
+  }));
 
 export function PhotoMosaic() {
-  const [lightboxPhoto, setLightboxPhoto] = useState<Photo | null>(null);
+  const [lightboxPhoto, setLightboxPhoto] = useState<Required<Photo> | null>(null);
 
   return (
     <section className="px-6 md:px-12 py-16 relative overflow-hidden" style={{ backgroundColor: "#fff" }}>
@@ -45,7 +52,7 @@ export function PhotoMosaic() {
         {/* Mosaic grid */}
         <div
           className="grid gap-3"
-          style={{ gridTemplateColumns: "repeat(6, 1fr)", gridAutoRows: "140px" }}
+          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gridAutoRows: "160px" }}
         >
           {mosaicPhotos.map((photo, i) => (
             <motion.div
@@ -54,7 +61,7 @@ export function PhotoMosaic() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.045, type: "spring", damping: 18 }}
               onClick={() => setLightboxPhoto(photo)}
-              className={`relative overflow-hidden cursor-pointer group ${photo.span || ""}`}
+              className="relative overflow-hidden cursor-pointer group"
               style={{
                 borderRadius: "16px",
                 border: `3px solid transparent`,
@@ -63,9 +70,10 @@ export function PhotoMosaic() {
               whileHover={{ scale: 1.03, zIndex: 10 }}
             >
               <img
-                src={photo.url}
+                src={photo.image}
                 alt={photo.caption}
                 className="w-full h-full object-cover"
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "/media/photos/placeholder.svg"; }}
               />
               {/* Colored hover overlay */}
               <div
@@ -108,9 +116,10 @@ export function PhotoMosaic() {
               onClick={(e) => e.stopPropagation()}
             >
               <img
-                src={lightboxPhoto.url.replace("w=200&h=200", "w=900&h=600").replace("w=400&h=400", "w=900&h=600").replace("w=400&h=200", "w=900&h=450").replace("w=200&h=400", "w=600&h=900")}
+                src={lightboxPhoto.image}
                 alt={lightboxPhoto.caption}
                 className="w-full object-cover"
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "/media/photos/placeholder.svg"; }}
               />
               <div className="absolute bottom-0 left-0 right-0 p-4"
                 style={{ background: `linear-gradient(to top, ${lightboxPhoto.accent}ee, transparent)` }}

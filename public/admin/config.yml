@@ -74,3 +74,19 @@ collections:
       - { label: "Video", name: "video", widget: "file" }
       - { label: "Tag (optional, e.g. NEW ✨)", name: "tag", widget: "string", required: false, default: "" }
       - { label: "Tag colour", name: "tagColor", widget: "color", default: "#84bd00" }
+
+  - name: "photos"
+    label: "Photo Gallery"
+    label_singular: "Photo"
+    folder: "src/content/photos"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    slug: "{{fields.id}}-{{slug}}"
+    identifier_field: caption
+    fields:
+      - { label: "ID", name: "id", widget: "number", value_type: "int", hint: "Unique number, doesn't need to change once set" }
+      - { label: "Photo", name: "image", widget: "image" }
+      - { label: "Caption", name: "caption", widget: "string" }
+      - { label: "Accent colour (optional)", name: "accent", widget: "color", required: false, allow_input: true, default: "" }
