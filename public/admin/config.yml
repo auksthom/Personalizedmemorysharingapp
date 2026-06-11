@@ -1,0 +1,72 @@
+backend:
+  name: github
+  repo: auksthom/Personalizedmemorysharingapp
+  branch: main
+  base_url: https://personalizedmemorysharingapp.vercel.app
+  auth_endpoint: api/auth
+
+# Where uploaded photos/videos/audio land, and the URL path used to reference them
+media_folder: "public/media/uploads"
+public_folder: "/media/uploads"
+
+publish_mode: simple
+
+collections:
+  - name: "people"
+    label: "People"
+    label_singular: "Person"
+    folder: "src/content/people"
+    create: true
+    delete: true
+    slug: "{{fields.id}}-{{slug}}"
+    identifier_field: name
+    fields:
+      - { label: "ID", name: "id", widget: "number", value_type: "int", hint: "Unique number, doesn't need to change once set" }
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role", name: "role", widget: "string" }
+      - { label: "Photo", name: "photo", widget: "image", default: "/media/photos/placeholder.svg" }
+      - { label: "Accent colour", name: "accent", widget: "color", default: "#84bd00" }
+      - label: "Messages by mood"
+        name: "messages"
+        widget: "object"
+        fields:
+          - label: "Happy"
+            name: "happy"
+            widget: "object"
+            fields:
+              - { label: "Message", name: "message", widget: "text" }
+              - { label: "Video", name: "video", widget: "file" }
+              - { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
+          - label: "Sad"
+            name: "sad"
+            widget: "object"
+            fields:
+              - { label: "Message", name: "message", widget: "text" }
+              - { label: "Video", name: "video", widget: "file" }
+              - { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
+          - label: "Miserable"
+            name: "miserable"
+            widget: "object"
+            fields:
+              - { label: "Message", name: "message", widget: "text" }
+              - { label: "Video", name: "video", widget: "file" }
+              - { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
+
+  - name: "recent_videos"
+    label: "Recent Videos"
+    label_singular: "Recent Video"
+    folder: "src/content/recent-videos"
+    create: true
+    delete: true
+    slug: "{{fields.id}}-{{slug}}"
+    identifier_field: title
+    fields:
+      - { label: "ID", name: "id", widget: "number", value_type: "int", hint: "Unique number, doesn't need to change once set" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Uploaded by", name: "uploader", widget: "string" }
+      - { label: "Upload date", name: "uploadedAt", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Duration (e.g. 3:24)", name: "duration", widget: "string" }
+      - { label: "Thumbnail image", name: "thumbnail", widget: "image" }
+      - { label: "Video", name: "video", widget: "file" }
+      - { label: "Tag (optional, e.g. NEW ✨)", name: "tag", widget: "string", required: false, default: "" }
+      - { label: "Tag colour", name: "tagColor", widget: "color", default: "#84bd00" }

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#e8f5cc"/>
+  <circle cx="150" cy="115" r="50" fill="#84bd00" opacity="0.5"/>
+  <rect x="60" y="180" width="180" height="100" rx="50" fill="#84bd00" opacity="0.5"/>
+  <text x="150" y="270" font-family="sans-serif" font-size="16" fill="#00563a" text-anchor="middle">Add photo</text>
+</svg>

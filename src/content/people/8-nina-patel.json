@@ -1,0 +1,12 @@
+{
+  "id": 8,
+  "name": "Nina Patel",
+  "role": "Operations Manager",
+  "photo": "/media/photos/8.jpg",
+  "accent": "#84bd00",
+  "messages": {
+    "happy": { "message": "Behind every launch, every event, every smooth quarterly review — there you were, quietly making everything work. The backbone we never talked about enough!", "video": "/media/videos/8_happy.mp4", "duration": "2:51" },
+    "sad": { "message": "Things are going to get a lot less organised around here without you. We'll really miss your steady hand.", "video": "/media/videos/8_sad.mp4", "duration": "2:30" },
+    "miserable": { "message": "If today feels heavy, remember how many times you've held everything together for the rest of us. You're allowed to rest now.", "video": "/media/videos/8_miserable.mp4", "duration": "2:00" }
+  }
+}

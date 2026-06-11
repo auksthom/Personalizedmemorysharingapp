@@ -1,38 +1,20 @@
 import { useEffect, useState } from "react";
-import { X, Play, Pause, Heart } from "lucide-react";
+import { X, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-
-interface Person {
-  id: number;
-  name: string;
-  role: string;
-  photo: string;
-  message: string;
-  duration: string;
-  accent: string;
-}
+import type { Mood, Person } from "../data/people";
 
 interface VideoModalProps {
   person: Person | null;
+  mood: Mood;
   onClose: () => void;
 }
 
-export function VideoModal({ person, onClose }: VideoModalProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
+export function VideoModal({ person, mood, onClose }: VideoModalProps) {
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    if (person) { setIsPlaying(false); setProgress(0); setLiked(false); }
+    if (person) setLiked(false);
   }, [person]);
-
-  useEffect(() => {
-    if (!isPlaying) return;
-    const iv = setInterval(() => {
-      setProgress((p) => { if (p >= 100) { clearInterval(iv); setIsPlaying(false); return 100; } return p + 0.5; });
-    }, 80);
-    return () => clearInterval(iv);
-  }, [isPlaying]);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -41,10 +23,11 @@ export function VideoModal({ person, onClose }: VideoModalProps) {
   }, [onClose]);
 
   const accent = person?.accent || "#e03189";
+  const content = person ? person.messages[mood] : null;
 
   return (
     <AnimatePresence>
-      {person && (
+      {person && content && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -68,56 +51,25 @@ export function VideoModal({ person, onClose }: VideoModalProps) {
           >
             {/* Video area */}
             <div className="relative aspect-video overflow-hidden" style={{ backgroundColor: "#1c2e23" }}>
-              <img
-                src={`${person.photo}&w=640&h=360&fit=crop&auto=format`}
-                alt={person.name}
-                className="w-full h-full object-cover"
-                style={{ filter: isPlaying ? "brightness(0.75)" : "brightness(0.55)" }}
-              />
-
-              {isPlaying && (
-                <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center gap-0.5 px-4 pb-4 h-16">
-                  {Array.from({ length: 44 }).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      animate={{ height: [4, Math.random() * 26 + 6, 4] }}
-                      transition={{ duration: 0.35 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.02 }}
-                      className="w-1 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: accent, opacity: 0.9 }}
-                    />
-                  ))}
-                </div>
-              )}
-
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="absolute inset-0 flex items-center justify-center"
+              <video
+                key={content.video}
+                src={content.video}
+                poster={person.photo}
+                controls
+                playsInline
+                className="w-full h-full object-contain bg-black"
+                onError={(e) => { (e.currentTarget.poster = "/media/photos/placeholder.svg"); }}
               >
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.93 }}
-                  className="w-16 h-16 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: accent, boxShadow: `0 0 0 6px ${accent}44` }}
-                >
-                  {isPlaying ? <Pause size={22} className="text-white" /> : <Play size={22} className="text-white ml-1" />}
-                </motion.div>
-              </button>
+                Sorry, your browser doesn't support embedded videos.
+              </video>
 
               <button
                 onClick={onClose}
-                className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center"
+                className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center z-10"
                 style={{ backgroundColor: accent }}
               >
                 <X size={14} className="text-white" />
               </button>
-            </div>
-
-            {/* Progress bar */}
-            <div className="h-1.5" style={{ backgroundColor: "#e8f5cc" }}>
-              <motion.div
-                className="h-full rounded-full"
-                style={{ width: `${progress}%`, backgroundColor: accent }}
-              />
             </div>
 
             {/* Info */}
@@ -144,12 +96,12 @@ export function VideoModal({ person, onClose }: VideoModalProps) {
 
               <div className="p-4 rounded-xl" style={{ backgroundColor: "#f4fbe6", border: `2px solid ${accent}33` }}>
                 <p className="text-sm leading-relaxed" style={{ color: "#00563a", fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                  "{person.message}"
+                  "{content.message}"
                 </p>
               </div>
 
               <p className="text-xs mt-3 text-right" style={{ color: "#00563a", fontFamily: "var(--font-body)", opacity: 0.7 }}>
-                Duration: {person.duration}
+                Duration: {content.duration}
               </p>
             </div>
           </motion.div>

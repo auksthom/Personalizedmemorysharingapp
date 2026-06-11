@@ -1,0 +1,12 @@
+{
+  "id": 6,
+  "name": "Aisha Okonkwo",
+  "role": "Customer Success",
+  "photo": "/media/photos/6.jpg",
+  "accent": "#20c6b9",
+  "messages": {
+    "happy": { "message": "You always knew what the customer actually needed — not what they said they needed. That kind of empathy is something you can't train. It's just who you are!", "video": "/media/videos/6_happy.mp4", "duration": "1:30" },
+    "sad": { "message": "I keep thinking about all the calls we tag-teamed together. Going to miss that teamwork more than words can say.", "video": "/media/videos/6_sad.mp4", "duration": "1:45" },
+    "miserable": { "message": "However today is going, just know — you've helped so many people feel better. Now it's your turn to be looked after.", "video": "/media/videos/6_miserable.mp4", "duration": "1:25" }
+  }
+}

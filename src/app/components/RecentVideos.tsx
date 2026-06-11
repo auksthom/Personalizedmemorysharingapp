@@ -1,54 +1,37 @@
 import { useState } from "react";
-import { Play } from "lucide-react";
-import { motion } from "motion/react";
+import { Play, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { formatDistanceToNow } from "date-fns";
 
-const recentVideos = [
-  {
-    id: 1,
-    title: "A message from the whole team",
-    uploader: "Team Lead",
-    uploadedAt: "2 hours ago",
-    duration: "3:24",
-    thumbnail: "https://images.unsplash.com/photo-1758691737584-a8f17fb34475?w=480&h=270&fit=crop&auto=format",
-    tag: "NEW ✨",
-    tagColor: "#e03189",
-  },
-  {
-    id: 2,
-    title: "Our best memories together",
-    uploader: "Marketing Team",
-    uploadedAt: "Yesterday",
-    duration: "5:12",
-    thumbnail: "https://images.unsplash.com/photo-1758520144658-c87be518b87e?w=480&h=270&fit=crop&auto=format",
-    tag: null,
-    tagColor: "#84bd00",
-  },
-  {
-    id: 3,
-    title: "From our Friday rituals",
-    uploader: "Everyone 🎉",
-    uploadedAt: "3 days ago",
-    duration: "2:48",
-    thumbnail: "https://images.unsplash.com/photo-1758873268904-89520408d4bc?w=480&h=270&fit=crop&auto=format",
-    tag: null,
-    tagColor: "#20c6b9",
-  },
-  {
-    id: 4,
-    title: "The roast — a loving tribute",
-    uploader: "Dev Squad",
-    uploadedAt: "5 days ago",
-    duration: "7:05",
-    thumbnail: "https://images.unsplash.com/photo-1758691737138-7b9b1884b1db?w=480&h=270&fit=crop&auto=format",
-    tag: null,
-    tagColor: "#84bd00",
-  },
-];
+interface RecentVideo {
+  id: number;
+  title: string;
+  uploader: string;
+  uploadedAt: string; // ISO date, e.g. "2026-06-08"
+  duration: string;
+  thumbnail: string;
+  video?: string;
+  tag?: string;
+  tagColor: string;
+}
+
+// Recent uploads are managed as content files under
+// src/content/recent-videos/*.json — edit them directly, or use the
+// /admin CMS to add a new "Recent Video" entry. Newest uploadedAt first.
+const recentVideoModules = import.meta.glob<RecentVideo>("../../content/recent-videos/*.json", {
+  eager: true,
+  import: "default",
+});
+
+const recentVideos: RecentVideo[] = Object.values(recentVideoModules).sort(
+  (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+);
 
 const borderColors = ["#e03189", "#84bd00", "#20c6b9", "#e03189"];
 
 export function RecentVideos() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [activeVideo, setActiveVideo] = useState<RecentVideo | null>(null);
 
   return (
     <section className="px-6 md:px-12 py-16" style={{ backgroundColor: "#ffffff" }}>
@@ -79,12 +62,13 @@ export function RecentVideos() {
               transition={{ delay: i * 0.08, type: "spring", damping: 18 }}
               onMouseEnter={() => setHoveredId(video.id)}
               onMouseLeave={() => setHoveredId(null)}
+              onClick={() => setActiveVideo(video)}
               className="rounded-2xl overflow-hidden cursor-pointer"
               style={{
-                border: `3px solid ${hoveredId === video.id ? borderColors[i] : "#e8f5cc"}`,
+                border: `3px solid ${hoveredId === video.id ? borderColors[i % borderColors.length] : "#e8f5cc"}`,
                 transform: hoveredId === video.id ? "translateY(-6px) rotate(-0.5deg)" : "none",
                 transition: "all 0.2s",
-                boxShadow: hoveredId === video.id ? `6px 6px 0 ${borderColors[i]}44` : "2px 2px 0 #e8f5cc",
+                boxShadow: hoveredId === video.id ? `6px 6px 0 ${borderColors[i % borderColors.length]}44` : "2px 2px 0 #e8f5cc",
                 backgroundColor: "#fff",
               }}
             >
@@ -95,13 +79,14 @@ export function RecentVideos() {
                   alt={video.title}
                   className="w-full h-full object-cover"
                   style={{ transform: hoveredId === video.id ? "scale(1.06)" : "scale(1)", transition: "transform 0.4s" }}
+                  onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "/media/photos/placeholder.svg"; }}
                 />
                 <div
                   className="absolute inset-0 flex items-center justify-center transition-opacity duration-200"
                   style={{ backgroundColor: "rgba(28,46,35,0.4)", opacity: hoveredId === video.id ? 1 : 0 }}
                 >
                   <div className="w-14 h-14 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: borderColors[i] }}
+                    style={{ backgroundColor: borderColors[i % borderColors.length] }}
                   >
                     <Play size={20} className="text-white ml-0.5" />
                   </div>
@@ -133,13 +118,66 @@ export function RecentVideos() {
                   >
                     {video.uploader}
                   </span>
-                  <span className="text-xs" style={{ color: "#00563a", fontFamily: "var(--font-body)" }}>· {video.uploadedAt}</span>
+                  <span className="text-xs" style={{ color: "#00563a", fontFamily: "var(--font-body)" }}>
+                    · {formatDistanceToNow(new Date(video.uploadedAt), { addSuffix: true })}
+                  </span>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Video player overlay */}
+      <AnimatePresence>
+        {activeVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(28,46,35,0.85)", backdropFilter: "blur(10px)" }}
+            onClick={() => setActiveVideo(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ type: "spring", damping: 20, stiffness: 260 }}
+              className="relative w-full max-w-2xl rounded-2xl overflow-hidden"
+              style={{ backgroundColor: "#fff", border: "4px solid #84bd00", boxShadow: "10px 10px 0 #84bd0044" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative aspect-video bg-black">
+                <video
+                  key={activeVideo.video || activeVideo.id}
+                  src={activeVideo.video}
+                  poster={activeVideo.thumbnail}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-contain bg-black"
+                >
+                  Sorry, your browser doesn't support embedded videos.
+                </video>
+                <button
+                  onClick={() => setActiveVideo(null)}
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center z-10"
+                  style={{ backgroundColor: "#84bd00" }}
+                >
+                  <X size={14} className="text-white" />
+                </button>
+              </div>
+              <div className="p-5">
+                <h3 style={{ fontFamily: "var(--font-display)", color: "#1c2e23", fontWeight: 700, fontSize: "1.15rem" }}>{activeVideo.title}</h3>
+                <p className="text-sm mt-1" style={{ color: "#00563a", fontFamily: "var(--font-body)" }}>
+                  {activeVideo.uploader} · {formatDistanceToNow(new Date(activeVideo.uploadedAt), { addSuffix: true })}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

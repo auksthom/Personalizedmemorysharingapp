@@ -1,0 +1,12 @@
+{
+  "id": 4,
+  "name": "James Park",
+  "role": "Data Scientist",
+  "photo": "/media/photos/4.jpg",
+  "accent": "#e03189",
+  "messages": {
+    "happy": { "message": "The numbers we crunched, the models we broke, the coffee at 11pm trying to figure out why the pipeline failed again — those are the moments I'll treasure!", "video": "/media/videos/4_happy.mp4", "duration": "2:37" },
+    "sad": { "message": "Honestly, who's going to debug the pipeline at midnight with me now? I'll miss you more than this message can say.", "video": "/media/videos/4_sad.mp4", "duration": "2:20" },
+    "miserable": { "message": "Rough day? Remember every model that failed before it worked. This is just another iteration — you'll come out the other side.", "video": "/media/videos/4_miserable.mp4", "duration": "1:55" }
+  }
+}

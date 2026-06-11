@@ -1,0 +1,12 @@
+{
+  "id": 5,
+  "name": "Lily Thompson",
+  "role": "Head of People",
+  "photo": "/media/photos/5.jpg",
+  "accent": "#84bd00",
+  "messages": {
+    "happy": { "message": "You made this place feel safe. You advocated for others without being asked. You showed up — really showed up. That's the rarest thing!", "video": "/media/videos/5_happy.mp4", "duration": "3:02" },
+    "sad": { "message": "It's hard to put into words how much you've meant to this team. We're going to miss your calm presence so much.", "video": "/media/videos/5_sad.mp4", "duration": "2:48" },
+    "miserable": { "message": "If you're struggling today, please be gentle with yourself. You've looked after so many of us — let someone look after you now.", "video": "/media/videos/5_miserable.mp4", "duration": "2:10" }
+  }
+}

@@ -1,20 +1,31 @@
+import { useState } from "react";
 import "../styles/fonts.css";
 import { HeroSection } from "./components/HeroSection";
 import { RecentVideos } from "./components/RecentVideos";
-import { MoodBoard } from "./components/MoodBoard";
+import { MoodGate } from "./components/MoodGate";
 import { PhotoMosaic } from "./components/PhotoMosaic";
 import { PeopleGrid } from "./components/PeopleGrid";
+import { MOODS, type Mood } from "./data/people";
 
 {/* MARKER-MAKE-KIT-INVOKED */}
 
 const navLinks = [
   { label: "Videos 🎬", href: "#videos", color: "#84bd00" },
-  { label: "Mood 🎭", href: "#mood", color: "#e03189" },
   { label: "Photos 📸", href: "#photos", color: "#20c6b9" },
   { label: "People 👥", href: "#people", color: "#84bd00" },
 ];
 
 export default function App() {
+  const [mood, setMood] = useState<Mood | null>(null);
+  const [viewAll, setViewAll] = useState(false);
+
+  // Show the mood gate first, unless the visitor chose to skip it
+  if (!mood && !viewAll) {
+    return <MoodGate onSelect={setMood} onSkip={() => setViewAll(true)} />;
+  }
+
+  const activeMood = mood ?? MOODS[0].key;
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#fff", fontFamily: "var(--font-body)" }}>
       {/* Nav */}
@@ -75,20 +86,10 @@ export default function App() {
           <RecentVideos />
         </div>
 
-        {/* Wavy divider going into mood */}
+        {/* Wavy divider going into photos */}
         <div className="overflow-hidden" style={{ height: 32, backgroundColor: "#f4fbe6" }}>
           <svg viewBox="0 0 1200 32" preserveAspectRatio="none" className="w-full h-full">
             <path d="M0,0 C150,32 350,0 600,16 C850,32 1050,0 1200,16 L1200,0 Z" fill="#ffffff" />
-          </svg>
-        </div>
-
-        <div id="mood">
-          <MoodBoard />
-        </div>
-
-        <div className="overflow-hidden" style={{ height: 32, backgroundColor: "#fff" }}>
-          <svg viewBox="0 0 1200 32" preserveAspectRatio="none" className="w-full h-full">
-            <path d="M0,16 C200,0 400,32 600,16 C800,0 1000,32 1200,16 L1200,0 L0,0 Z" fill="#f4fbe6" />
           </svg>
         </div>
 
@@ -103,7 +104,12 @@ export default function App() {
         </div>
 
         <div id="people">
-          <PeopleGrid />
+          <PeopleGrid
+            mood={activeMood}
+            viewAll={viewAll}
+            onToggleViewAll={() => setViewAll((v) => !v)}
+            onChangeMood={() => { setMood(null); setViewAll(false); }}
+          />
         </div>
 
         {/* Footer */}
