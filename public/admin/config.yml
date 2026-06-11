@@ -18,6 +18,8 @@ collections:
     folder: "src/content/people"
     create: true
     delete: true
+    extension: "json"
+    format: "json"
     slug: "{{fields.id}}-{{slug}}"
     identifier_field: name
     fields:
@@ -58,6 +60,8 @@ collections:
     folder: "src/content/recent-videos"
     create: true
     delete: true
+    extension: "json"
+    format: "json"
     slug: "{{fields.id}}-{{slug}}"
     identifier_field: title
     fields:
