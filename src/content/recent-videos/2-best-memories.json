@@ -1,11 +1,11 @@
 {
-  "id": 2,
-  "title": "Our best memories together",
-  "uploader": "Marketing Team",
-  "uploadedAt": "2026-06-07",
-  "duration": "5:12",
+  "tagColor": "#84bd00",
   "thumbnail": "/media/photos/recent-2.jpg",
-  "video": "/media/videos/recent-2.mp4",
+  "uploader": "Originals",
+  "uploadedAt": "2026-06-12",
+  "duration": "5:12",
+  "title": "Departed message",
   "tag": "",
-  "tagColor": "#84bd00"
+  "video": "/media/uploads/whatsapp-video-2026-06-12-at-08.42.21.mp4",
+  "id": 2
 }
