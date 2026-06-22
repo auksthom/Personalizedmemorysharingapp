@@ -1,11 +1,11 @@
 {
-  "id": 1,
-  "title": "A message from the whole team",
+  "tagColor": "#e03189",
+  "thumbnail": "/media/uploads/screenshot-2026-06-22-at-09.15.27.png",
   "uploader": "Team Lead",
-  "uploadedAt": "2026-06-08",
-  "duration": "3:24",
-  "thumbnail": "/media/photos/recent-1.jpg",
-  "video": "/media/videos/recent-1.mp4",
+  "uploadedAt": "2026-06-22",
+  "duration": "0:31",
+  "title": "A message from the team",
   "tag": "NEW ✨",
-  "tagColor": "#e03189"
+  "video": "/media/uploads/fe1d1389-c172-4bd3-8f78-d8444d60d7b7.mp4",
+  "id": 1
 }
