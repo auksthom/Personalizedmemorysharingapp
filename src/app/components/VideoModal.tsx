@@ -3,6 +3,18 @@ import { X, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { Person } from "../data/people";
 
+function getYouTubeEmbedUrl(url: string): string | null {
+  // Matches youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : null;
+}
+
+function isYouTube(url: string) {
+  return /youtube\.com|youtu\.be/.test(url);
+}
+
 interface VideoModalProps {
   person: Person | null;
   onClose: () => void;
@@ -49,17 +61,27 @@ export function VideoModal({ person, onClose }: VideoModalProps) {
           >
             {/* Video area */}
             <div className="relative aspect-video overflow-hidden" style={{ backgroundColor: "#1c2e23" }}>
-              <video
-                key={person.video}
-                src={person.video}
-                poster={person.photo}
-                controls
-                playsInline
-                className="w-full h-full object-contain bg-black"
-                onError={(e) => { (e.currentTarget.poster = "/media/photos/placeholder.svg"); }}
-              >
-                Sorry, your browser doesn't support embedded videos.
-              </video>
+              {isYouTube(person.video) ? (
+                <iframe
+                  key={person.video}
+                  src={getYouTubeEmbedUrl(person.video) ?? person.video}
+                  className="w-full h-full"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  key={person.video}
+                  src={person.video}
+                  poster={person.photo}
+                  controls
+                  playsInline
+                  className="w-full h-full object-contain bg-black"
+                  onError={(e) => { (e.currentTarget.poster = "/media/photos/placeholder.svg"); }}
+                >
+                  Sorry, your browser doesn't support embedded videos.
+                </video>
+              )}
 
               <button
                 onClick={onClose}
