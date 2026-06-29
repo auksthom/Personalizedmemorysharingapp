@@ -3,6 +3,17 @@ import { Play, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { formatDistanceToNow } from "date-fns";
 
+function getYouTubeEmbedUrl(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : null;
+}
+
+function isYouTube(url: string) {
+  return /youtube\.com|youtu\.be/.test(url);
+}
+
 interface RecentVideo {
   id: number;
   title: string;
@@ -149,17 +160,27 @@ export function RecentVideos() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative aspect-video bg-black">
-                <video
-                  key={activeVideo.video || activeVideo.id}
-                  src={activeVideo.video}
-                  poster={activeVideo.thumbnail}
-                  controls
-                  autoPlay
-                  playsInline
-                  className="w-full h-full object-contain bg-black"
-                >
-                  Sorry, your browser doesn't support embedded videos.
-                </video>
+                {activeVideo.video && isYouTube(activeVideo.video) ? (
+                  <iframe
+                    key={activeVideo.video}
+                    src={getYouTubeEmbedUrl(activeVideo.video) ?? activeVideo.video}
+                    className="w-full h-full"
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video
+                    key={activeVideo.video || activeVideo.id}
+                    src={activeVideo.video}
+                    poster={activeVideo.thumbnail}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-contain bg-black"
+                  >
+                    Sorry, your browser doesn't support embedded videos.
+                  </video>
+                )}
                 <button
                   onClick={() => setActiveVideo(null)}
                   className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center z-10"
