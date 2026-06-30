@@ -15,7 +15,7 @@ function isYouTube(url: string) {
 }
 
 interface RecentVideo {
-  id: number;
+  id: number;   // derived from filename
   title: string;
   uploader: string;
   uploadedAt: string; // ISO date, e.g. "2026-06-08"
@@ -29,14 +29,21 @@ interface RecentVideo {
 // Recent uploads are managed as content files under
 // src/content/recent-videos/*.json — edit them directly, or use the
 // /admin CMS to add a new "Recent Video" entry. Newest uploadedAt first.
-const recentVideoModules = import.meta.glob<RecentVideo>("../../content/recent-videos/*.json", {
-  eager: true,
-  import: "default",
-});
-
-const recentVideos: RecentVideo[] = Object.values(recentVideoModules).sort(
-  (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+// IDs are auto-derived from the filename — no manual ID entry needed.
+const recentVideoModules = import.meta.glob<Omit<RecentVideo, "id">>(
+  "../../content/recent-videos/*.json",
+  { eager: true, import: "default" }
 );
+
+function idFromPath(path: string, fallback: number): number {
+  const filename = path.split("/").pop() ?? "";
+  const n = parseInt(filename, 10);
+  return isNaN(n) ? fallback : n;
+}
+
+const recentVideos: RecentVideo[] = Object.entries(recentVideoModules)
+  .map(([path, data], i) => ({ ...data, id: idFromPath(path, 10000 + i) }))
+  .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
 
 const borderColors = ["#e03189", "#84bd00", "#20c6b9", "#e03189"];
 

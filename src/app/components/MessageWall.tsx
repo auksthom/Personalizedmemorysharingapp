@@ -10,14 +10,22 @@ interface WallMessage {
 
 // Curated/seed messages live as content files under src/content/messages/*.json —
 // add new ones via the /admin CMS ("Messages" collection) if you want to hand-pick some.
-const messageModules = import.meta.glob<WallMessage>("../../content/messages/*.json", {
-  eager: true,
-  import: "default",
-});
+// IDs are auto-derived from the filename — no manual ID entry needed.
+const messageModules = import.meta.glob<Omit<WallMessage, "id">>(
+  "../../content/messages/*.json",
+  { eager: true, import: "default" }
+);
+
+function idFromPath(path: string, fallback: number): number {
+  const filename = path.split("/").pop() ?? "";
+  const n = parseInt(filename, 10);
+  return isNaN(n) ? fallback : n;
+}
 
 const ACCENTS = ["#e03189", "#84bd00", "#20c6b9"];
 
-const seedMessages: WallMessage[] = Object.values(messageModules);
+const seedMessages: WallMessage[] = Object.entries(messageModules)
+  .map(([path, data], i) => ({ ...data, id: idFromPath(path, 10000 + i) }));
 
 export function MessageWall() {
   const [liveMessages, setLiveMessages] = useState<WallMessage[]>([]);

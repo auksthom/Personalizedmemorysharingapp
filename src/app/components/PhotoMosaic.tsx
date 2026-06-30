@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, ZoomIn } from "lucide-react";
 
 interface Photo {
-  id: number;
+  id: number;   // derived from filename
   image: string;
   caption: string;
   accent?: string;
@@ -11,14 +11,22 @@ interface Photo {
 
 // Photos are managed as content files under src/content/photos/*.json —
 // edit them directly, or use the /admin CMS to add a new "Photo".
-const photoModules = import.meta.glob<Photo>("../../content/photos/*.json", {
+// IDs are auto-derived from the filename so no manual ID entry needed.
+const photoModules = import.meta.glob<Omit<Photo, "id">>("../../content/photos/*.json", {
   eager: true,
   import: "default",
 });
 
 const ACCENTS = ["#e03189", "#84bd00", "#20c6b9"];
 
-const mosaicPhotos: Required<Photo>[] = Object.values(photoModules)
+function idFromPath(path: string, fallback: number): number {
+  const filename = path.split("/").pop() ?? "";
+  const n = parseInt(filename, 10);
+  return isNaN(n) ? fallback : n;
+}
+
+const mosaicPhotos: Required<Photo>[] = Object.entries(photoModules)
+  .map(([path, data], i) => ({ ...data, id: idFromPath(path, 10000 + i) }))
   .sort((a, b) => a.id - b.id)
   .map((photo, i) => ({
     ...photo,
