@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     try {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
       const name = (body?.name || "").toString().trim().slice(0, 80);
-      const message = (body?.message || "").toString().trim().slice(0, 1000);
+      const message = (body?.message || "").toString().trim().slice(0, 2000);
 
       if (!name || !message) {
         res.status(400).json({ error: "Name and message are required." });
