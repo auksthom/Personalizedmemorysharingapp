@@ -9,7 +9,106 @@
     </style>
   </head>
   <body>
+    <script>
+      // Inline config — avoids fetching config.yml as a static file
+      window.CMS_MANUAL_INIT = true;
+    </script>
     <!-- Decap CMS (formerly Netlify CMS) -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      CMS.init({
+        config: {
+          backend: {
+            name: "github",
+            repo: "auksthom/Personalizedmemorysharingapp",
+            branch: "main",
+            base_url: "https://www.rememberus.uk",
+            auth_endpoint: "api/auth"
+          },
+          media_folder: "public/media/uploads",
+          public_folder: "/media/uploads",
+          publish_mode: "simple",
+          collections: [
+            {
+              name: "people",
+              label: "People",
+              label_singular: "Person",
+              folder: "src/content/people",
+              create: true,
+              delete: true,
+              extension: "json",
+              format: "json",
+              slug: "{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}-{{slug}}",
+              identifier_field: "name",
+              fields: [
+                { label: "Name", name: "name", widget: "string" },
+                { label: "Role", name: "role", widget: "string" },
+                { label: "Photo", name: "photo", widget: "image", default: "/media/photos/placeholder.svg" },
+                { label: "Accent colour", name: "accent", widget: "color", default: "#84bd00" },
+                { label: "Message", name: "message", widget: "text" },
+                { label: "Video", name: "video", widget: "file" },
+                { label: "Duration (e.g. 1:30)", name: "duration", widget: "string" }
+              ]
+            },
+            {
+              name: "recent_videos",
+              label: "Recent Videos",
+              label_singular: "Recent Video",
+              folder: "src/content/recent-videos",
+              create: true,
+              delete: true,
+              extension: "json",
+              format: "json",
+              slug: "{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}-{{slug}}",
+              identifier_field: "title",
+              fields: [
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Uploaded by", name: "uploader", widget: "string" },
+                { label: "Upload date", name: "uploadedAt", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" },
+                { label: "Duration (e.g. 3:24)", name: "duration", widget: "string" },
+                { label: "Thumbnail image", name: "thumbnail", widget: "image" },
+                { label: "Video", name: "video", widget: "file" },
+                { label: "tag", name: "tag", widget: "string", required: false, default: "" },
+                { label: "Tag colour", name: "tagColor", widget: "color", default: "#84bd00" }
+              ]
+            },
+            {
+              name: "photos",
+              label: "Photo Gallery",
+              label_singular: "Photo",
+              folder: "src/content/photos",
+              create: true,
+              delete: true,
+              extension: "json",
+              format: "json",
+              slug: "{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}-{{slug}}",
+              identifier_field: "caption",
+              fields: [
+                { label: "Photo", name: "image", widget: "image" },
+                { label: "Caption", name: "caption", widget: "string" },
+                { label: "Accent colour (optional)", name: "accent", widget: "color", required: false, allow_input: true, default: "" }
+              ]
+            },
+            {
+              name: "messages",
+              label: "Messages",
+              label_singular: "Message",
+              folder: "src/content/messages",
+              create: true,
+              delete: true,
+              extension: "json",
+              format: "json",
+              slug: "{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}-{{slug}}",
+              identifier_field: "name",
+              fields: [
+                { label: "Name", name: "name", widget: "string" },
+                { label: "Message", name: "message", widget: "text" },
+                { label: "Date (optional)", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
+              ]
+            }
+          ]
+        }
+      });
+    </script>
   </body>
 </html>
