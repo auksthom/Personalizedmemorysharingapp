@@ -2,7 +2,7 @@ backend:
   name: github
   repo: auksthom/Personalizedmemorysharingapp
   branch: main
-  base_url: https://rememberus.neilsant.uk
+  base_url: https://www.rememberus.uk
   auth_endpoint: api/auth
 
 # Where uploaded photos/videos/audio land, and the URL path used to reference them
