@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/((?!api|admin|media).*)", "destination": "/index.html" }
+    { "source": "/admin/:path*", "destination": "/admin/:path*" },
+    { "source": "/media/:path*", "destination": "/media/:path*" },
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
